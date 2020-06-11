@@ -81,7 +81,9 @@ module Lol
     set_mode(opts[:truecolor]) unless @paint_init
     filtered = str.scan(ANSI_ESCAPE)
     filtered.each_with_index do |c, i|
-      color = rainbow(opts[:freq], @os+i/opts[:spread])
+      stepback = !opts[:invert] && c[1] == " " ? 1 : 0
+      color = rainbow(opts[:freq], @os+(i-stepback)/opts[:spread])
+
       if opts[:invert] then
         print c[0], Paint.color(nil, color), c[1], "\e[49m"
       else
